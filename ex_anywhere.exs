@@ -53,7 +53,7 @@ Usage: iex -S exa
     raise RuntimeError, message: "`mix #{cmd |> Enum.join(" ")}` failed with code: #{code}"
   end
 
-  def mix_cmd!(cmd, opt \\ []) do
+  def mix_cmd(cmd, opt \\ []) do
     opt =
       if repl?() && !opt[:into] do
         [into: IO.stream(:stdio, :line)] ++ opt
@@ -69,6 +69,10 @@ Usage: iex -S exa
       end
 
     System.cmd("mix", cmd, opt)
+  end
+
+  def mix_cmd!(cmd, opt \\ []) do
+    mix_cmd(cmd, opt)
     |> success_cmd!(cmd)
   end
 
@@ -76,8 +80,8 @@ Usage: iex -S exa
     unless File.exists?(@mix_file) do
       parent_dir = @mix_project_dir |> Path.dirname()
       File.mkdir_p!(parent_dir)
-      mix_cmd!(~w{local.hex --if-missing --force})
-      mix_cmd!(~w{local.rebar --if-missing --force})
+      mix_cmd(~w{local.hex --if-missing --force})
+      mix_cmd(~w{local.rebar --if-missing --force})
       mix_cmd!(~w{new ex_anywhere}, cd: parent_dir)
     end
   end
