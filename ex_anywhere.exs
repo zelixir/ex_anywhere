@@ -76,6 +76,8 @@ Usage: iex -S exa
     unless File.exists?(@mix_file) do
       parent_dir = @mix_project_dir |> Path.dirname()
       File.mkdir_p!(parent_dir)
+      mix_cmd!(~w{local.hex --if-missing --force})
+      mix_cmd!(~w{local.rebar --if-missing --force})
       mix_cmd!(~w{new ex_anywhere}, cd: parent_dir)
     end
   end
