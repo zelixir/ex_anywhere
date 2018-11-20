@@ -3,7 +3,6 @@ With ex_anywhere, we can use elixir library in iex and .exs, don't need to creat
 # install
 ```
 git clone https://github.com/zelixir/ex_anywhere.git
-chmod 777 $(pwd)/ex_anywhere/ex_anywhere.exs
 ln -s $(pwd)/ex_anywhere/ex_anywhere.exs /usr/local/bin/exa
 ```
 
