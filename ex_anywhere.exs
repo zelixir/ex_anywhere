@@ -61,7 +61,7 @@ Usage: iex -S exa
           end)
 
         load_deps(deps)
-        Code.eval_quoted(quoted)
+        Code.eval_quoted(quoted, [], file: file)
     end
   end
 
