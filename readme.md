@@ -1,10 +1,24 @@
 With ex_anywhere, we can use elixir library in iex and .exs, don't need to create a mix project 
 
 # install
-```
+```bash
 git clone https://github.com/zelixir/ex_anywhere.git
 ln -s $(pwd)/ex_anywhere/ex_anywhere.exs /usr/local/bin/exa
 ```
+
+# install (on windows)
+
+```bash
+git clone https://github.com/zelixir/ex_anywhere.git
+copy ex_anywhere\ex_anywhere.exs "c:\Program Files (x86)\Elixir\bin\exa"
+```
+
+`c:\Program Files (x86)\Elixir\bin\exa.bat` :
+```bat
+@if defined ELIXIR_CLI_ECHO (@echo on) else (@echo off)
+call "%~dp0\elixir.bat" "%~dp0\exa" %*
+```
+
 
 # use in iex
 

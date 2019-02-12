@@ -2,7 +2,7 @@
 
 defmodule ExAnywhere do
   import Access
-  @mix_project_dir System.get_env("HOME") <> "/.ex_anywhere/ex_anywhere"
+  @mix_project_dir (System.get_env("HOME") || "c:") <> "/.ex_anywhere/ex_anywhere"
   @mix_file @mix_project_dir <> "/mix.exs"
 
   def main do
@@ -14,7 +14,29 @@ defmodule ExAnywhere do
         # let iex import module
         spawn(fn ->
           :timer.sleep(100)
-          {ev, server} = IEx.Server.evaluator()
+
+          {ev, server} =
+            IEx.Server.evaluator()
+            |> case do
+              nil ->
+                # on windows it returns nil, but we can enum all process to find the evaluator
+                Process.list()
+                |> Enum.filter(fn pid ->
+                  {IEx.Evaluator, :init, 4} == Process.info(pid)[:dictionary][:"$initial_call"]
+                end)
+                |> case do
+                  [ev | _] ->
+                    [server] = Process.info(ev)[:dictionary][:"$ancestors"]
+                    {ev, server}
+
+                  [] ->
+                    nil
+                end
+
+              value ->
+                value
+            end
+
           send(ev, {:eval, server, "import ExAnywhere.Helper; :ok", %IEx.State{prefix: "iex"}})
         end)
 
