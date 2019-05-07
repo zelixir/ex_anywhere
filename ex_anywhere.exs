@@ -16,7 +16,7 @@ defmodule ExAnywhere do
           :timer.sleep(100)
 
           {ev, server} =
-            IEx.Server.evaluator()
+            evaluator()
             |> case do
               nil ->
                 # on windows it returns nil, but we can enum all process to find the evaluator
@@ -62,6 +62,14 @@ Usage: iex -S exa
 
         load_deps(deps)
         Code.eval_quoted(quoted, [], file: file)
+    end
+  end
+
+  def evaluator do
+    Version.compare(System.version(), "1.8.0")
+    |> case do
+      :lt -> IEx.Server.evaluator()
+      _ -> IEx.Broker.evaluator()
     end
   end
 
